@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        a{
+            text-decoration-line: none;
+        }
+        .player-wrap{
+            display: flex;
+            flex-wrap: nowrap;
+            position: fixed;
+            width: 40%;
+            bottom: 5px;
+            right:0;
+            color: #f3f3f3;
+        }
+        .circle{
+            flex: 1;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50% 0 0 50%/50%;
+            background-color: #2d2d2d;
+            box-sizing: border-box;
+            border-top: 1px #1e1e1e solid;
+            box-shadow: 0 -3px 3px #d8d8d8;
+            cursor: pointer;
+            text-indent: -999999px;
+        }
+        .circle span{
+            height: 20px;
+            width: 20px;
+            margin-top: 14px;
+            display: block;
+            background-image: url(./images/openleave.png);
+        }
+        .player{
+            display:flex;
+            flex-wrap: nowrap;
+            flex: 11;
+            height: 50px;
+            background-color: #2d2d2d;
+            box-sizing: border-box;
+            border: 1px #1e1e1e solid;
+            box-shadow: 0 -3px 3px #d8d8d8;
+        }
+        .controler{
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-around ;
+            flex:3;
+            height: 100%;
+        }
+        .play-wrap{
+            position: relative;
+        }
+        .picture{
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-image: url(./images/play.png);
+        }
+        .btn{
+            width: 30px;
+            height: 30px;
+            margin: 9px 0;
+            text-indent: -999999px;
+        }
+        .next{
+            background-image: url(./images/playbar.png);
+            background-position: 73px -129px;
+            /* 195 */
+        }
+        .prev{
+            background-image: url(./images/playbar.png);
+            background-position: 1px -129px; 
+            /* 123  */
+        }
+        .play{
+            position: absolute;
+            display: block;
+            left: 1px;
+            top: 0px;
+            margin: 6.5px;
+            width: 35px;
+            height: 35px;
+            text-indent: -99999px;
+            background-image: url(./images/playbar.png);
+            background-position: -1px -204px;
+            opacity: 0.9;
+        }
+        .process{
+            margin-left: 10px;
+            flex: 6;
+            display: flex;
+            flex-direction: column;
+        }
+        .song-name{
+            min-width: 100px;
+            font-size: 11px;
+            font-family: Arial;
+            text-align: center;
+            line-height: 20px;
+            opacity: 0.9;
+        }
+        .process-bar{
+            width: 100%;
+            height: 8px;
+            border-radius: 10px;
+            background-color: darkgray;
+            position: relative;
+            cursor: pointer;
+        }
+        .bar-cover{
+            box-sizing: border-box;
+            border: darkgray 1px solid;
+            border-radius: 10px;
+            height:8px;
+            width: 0px;
+            background-color: #c70c0c;
+            opacity: 0.5;
+        }
+        .point{
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: #c70c0c;
+            position: absolute;
+            left:-5px;
+            top: -1px;
+            box-sizing: border-box;
+            border: 2px #f3f3f3 solid;
+        }
+        .time-duration{
+            min-width: 100px;
+            line-height: 20px;
+            font-size: 11px;
+            font-family: Arial;
+            text-align: center;
+            opacity: 0.9;
+        }
+        .others{
+            flex: 3;
+            display: flex;
+            justify-content: center;
+            min-width: 70px;
+        }
+        .volume-wrap{
+            position: relative;
+        }
+        .linkVolume{
+            display: block;
+            width: 30px;
+            height: 30px;
+            text-indent: -99999px;
+            margin:9px 0 0 5px;
+            background-image: url(./images/playbar.png);
+            background-position: 1px -245px;
+            /* -28 */
+        }
+        .volume{
+            display: none;
+            border-radius: 5px;
+            width:40px;
+            height: 100px;
+            background-color: #2d2d2d;
+            box-sizing: border-box;
+            border: 1px #1e1e1e solid;
+            box-shadow: 2px -2px 2px #d8d8d8;
+            position: absolute;
+            left:0;
+            top:-102px;
+        }
+        .volume-bar{
+            position: relative;
+            margin-left: 15px;
+            margin-top: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 8px;
+            height: 80px;
+            background-color:darkgray ;
+        }
+        .volume-cover{
+            position: absolute;
+            box-sizing: border-box;
+            border: darkgray 1px solid;
+            border-radius: 10px;
+            height:0;
+            width: 8px;
+            left:0;
+            bottom: 0;
+            background-color: #c70c0c;
+            opacity: 0.5;
+        }
+        .volume-point{
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: #c70c0c;
+            box-sizing: border-box;
+            border: 2px #f3f3f3 solid;
+            position: absolute;
+            left: -1px;
+            bottom: -5px;
+        }
+        .player-wrap .others a{
+            color:#f3f3f3;
+            text-decoration-line: none;
+        }
+        .mode{
+            display: block;
+            width: 30px;
+            height: 30px;
+            text-indent: -99999px;
+            margin:9px 0 0 5px;
+            background-image: url(./images/playbar.png);
+            background-position: -1px -341px;
+            /* -31 */
+        }
+    </style>
+</head>
+<body>
+    <div class="player-wrap">
+        <div class="circle" id="outBtn"><span id="spanImg">open</span></div>
+        <div class="player">
+            <div class="controler">
+                <audio src="./music/xiangshui.mp3" id="audioObj"></audio>
+                <a href="javascript:" class="btn prev" id="prev"><span>prev</span></a>
+                <div class="play-wrap">
+                    <div class="picture"></div>
+                    <a href="##" class="play" id="play">播放</a>
+                </div>
+                <a href="##" class="btn next" id="next"><span>next</span></a>
+            </div>
+            <div class="process">
+                <div class="song-name" id="songName">香水百合</div>
+                <div class="process-bar" id="processBar">
+                    <div class="bar-cover"></div>
+                    <div class="point"></div>
+                </div>
+                <div class="time-duration">
+                    <span id="currentTime">00:00</span>/
+                    <span id="duration">00:00</span>
+                </div>
+            </div>
+            <div class="others" id="others">
+                <div class="volume-wrap" id="volumeWrap">
+                    <a href="javascript:" class="linkVolume" id="linkVolume">声音</a>
+                    <div class="volume" id="volume">
+                        <div class="volume-bar" id="volumeBar">
+                            <div class="volume-cover"></div>
+                            <div class="volume-point"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="paly-mode"><a href="javascript:" class="mode" id="mode">模式</a></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    //音乐资源
+    let publicPath = './music'
+    let musicListMeta = [{src:`${publicPath}/xiangshui.mp3`,name:'香水百合'},
+                        {src:`${publicPath}/badapple.mp3`, name:'Bad Apple!!'},
+                        {src:`${publicPath}/unonano.mp3`,name:'unonano'},
+                        {src:`${publicPath}/zhaomo.mp3`,name:'着魔'},
+                        {src:`${publicPath}/toutou.mp4`,name:'偷偷的爱上你'},
+                        {src:`${publicPath}/nizhan.mp3`,name:'逆战'},
+                        {src:`${publicPath}/zuijin.mp3`,name:'最近'},
+                        {src:`${publicPath}/jinitaimei.mp3`,name:'鸡你太美'},
+                        {src:`${publicPath}/huohong.mp3`,name:'火红的萨日朗'}]
+    let musicList = [...musicListMeta]
+
+    let audioObj = document.getElementById('audioObj')
+    let outBtn = document.getElementById('outBtn')
+    let timer = null
+    let nowRight = 0
+    //点击滑动动画实现
+    outBtn.addEventListener('click',() => {
+       let wrapWidth = parseInt(window.getComputedStyle(outBtn.parentNode).width)
+       let outBtnWidth = parseInt(window.getComputedStyle(outBtn).width)
+       let result = wrapWidth - outBtnWidth
+       if(nowRight <= 0){
+            timer = setInterval(() => {
+                nowRight+=10
+                outBtn.parentNode.style.right = -nowRight + 'px'
+                if(nowRight >= result){
+                    outBtn.parentNode.style.right = -result + 'px'
+                    clearInterval(timer)
+                }
+            },10)          
+       }else{
+            timer = setInterval(() => {
+                nowRight-=10
+                outBtn.parentNode.style.right = -nowRight + 'px'
+                if(nowRight <= 0){
+                    outBtn.parentNode.style.right = '0px'
+                    clearInterval(timer)
+                }
+            },10)  
+       }  
+    })
+
+    //鼠标移入的图片的高亮显示切换
+    let spanImgEl = document.getElementById('spanImg')
+    let spanImg = window.getComputedStyle(spanImgEl).backgroundImage
+    outBtn.addEventListener('mouseover',() => {
+        spanImgEl.style.backgroundImage = `url(./images/openover.png)`
+    })
+    outBtn.addEventListener('mouseleave',() => {
+        spanImgEl.style.backgroundImage = spanImg
+    })
+
+    //播放按钮的交互功能，和播放暂停功能的实现
+    let playBtn = document.getElementById('play')
+    let pictureEl = document.getElementById('play').parentElement.children[0]
+    let flag = false
+    playBtn.addEventListener('click',() => {
+        flag = !flag
+        playOrPause(flag)
+    })
+    let playBtnImagePositionY = parseInt(window.getComputedStyle(playBtn).backgroundPositionY)
+    function playOrPause (flag) {
+        if(flag){
+            audioObj.play()
+            playBtn.style.backgroundPositionY = playBtnImagePositionY + 39 + 'px'
+            pointIFMouseDownFlag = false
+            setProcessTimer()
+        }else{
+            audioObj.pause()
+            playBtn.style.backgroundPositionY = playBtnImagePositionY + 'px'
+            clearInterval(processTimer)
+        }
+    }
+    let playBtnImagePositionX = parseInt(window.getComputedStyle(playBtn).backgroundPositionX)
+    playBtn.addEventListener('mouseover',() => {
+        playBtn.style.backgroundPositionX = playBtnImagePositionX - 40 + 'px'
+    })
+    playBtn.addEventListener('mouseleave',() => {
+        playBtn.style.backgroundPositionX = playBtnImagePositionX + 'px'
+    })
+
+    //音乐切换按钮功能实现，包括音乐信息的重新加载
+    let nowPlayMusicIndex = 0
+    let nextBtn = document.getElementById('next')
+    let prevBtn = document.getElementById('prev')
+    let songNameObj = document.getElementById('songName')
+    let durationHtml = document.getElementById('duration')
+    let currentTimeHtml = document.getElementById('currentTime')
+    audioObj.addEventListener('loadeddata',() => {
+        currentTimeHtml.innerHTML = '00:00'
+        let processCoverEl = processBarEl.children[0]
+        let pointEl = processBarEl.children[1]
+        processCoverEl.style.width = '0px'
+        pointEl.style.left = '-5px'
+        let result = timeFactory(audioObj.duration)
+        durationHtml.innerHTML = result
+        songNameObj.innerHTML = musicList[nowPlayMusicIndex].name
+    })
+    function timeFactory (secondNum) {
+        let minute = parseInt(secondNum/60)
+        let second = parseInt(secondNum%60)
+        if(minute>=10){ 
+            minute = minute
+            if(second>=10){ second = second}
+            else{second = '0' + second}
+        }else{
+            minute = '0' + minute
+            if(second>=10){second = second}
+            else{second = '0' + second}
+        }   
+       return minute + ':' + second
+    }
+    let mode = 'loop'
+    audioObj.addEventListener('ended',() => {
+        if(mode == 'loop'){
+            musicList = [...musicListMeta]
+            changeSong('next')
+            clearDegIndex()
+        }else if(mode == 'repeat'){
+            changeSong('repeat')
+            clearDegIndex()
+        }else if(mode == 'random'){
+            musicList = shuffle(musicList)
+            changeSong('next')
+            clearDegIndex()
+        }
+    })
+
+    //有关进度条的一切功能，包括点击，拖拽
+    let processTimer = null
+    let processBarEl = document.getElementById('processBar')
+    let processCoverEl = processBarEl.children[0]
+    let pointEl = processBarEl.children[1]
+    let othersEl = document.getElementById('others')
+    let pointIFMouseDownFlag = false
+    pointEl.addEventListener('mousedown',(e) => {
+        e.preventDefault()
+        pointIFMouseDownFlag = !pointIFMouseDownFlag
+        let pointLeftPosition =  parseInt(window.getComputedStyle(pointEl).left)
+        let processBarWidth =  parseInt(window.getComputedStyle(processBarEl).width)
+        let mouseDownX = e.clientX
+        let totalMoveDur = 0
+        document.onmousemove = (e) => {
+            let moveDur = e.clientX - mouseDownX
+            totalMoveDur = moveDur + pointLeftPosition
+            if(totalMoveDur < -5){
+                totalMoveDur = -5
+            }
+            if(totalMoveDur > (processBarWidth - 5)){
+                totalMoveDur = processBarWidth - 5
+            }
+            processCoverEl.style.width =  totalMoveDur + 5 + 'px'
+            pointEl.style.left = totalMoveDur +'px'
+            let time = audioObj.duration * (( totalMoveDur + 5 )/ processBarWidth)
+            currentTimeHtml.innerHTML = timeFactory(time)
+            document.onmouseup = () => {
+                document.onmousemove = null
+                setCurrentTime(time)
+                pointIFMouseDownFlag = !pointIFMouseDownFlag
+                document.onmouseup = null
+            }
+        }     
+    })
+    processBarEl.addEventListener('click',(e) => {
+        let processBarWidth =  parseInt(window.getComputedStyle(processBarEl).width)
+        let othersWidth = parseInt(window.getComputedStyle(othersEl).width)
+        let mouseLeft = parseInt( e.clientX - (document.body.offsetWidth - othersWidth - processBarWidth) -15)
+        let time = audioObj.duration * (mouseLeft / processBarWidth)
+        setCurrentTime(time)  
+        setPointPosition ()
+    })
+    //旋转动画
+    let degIndex = 0
+    function clearDegIndex () {
+        degIndex = 0
+    }
+    function setProcessTimer () {
+        clearInterval(processTimer)
+        processTimer = setInterval(() => {
+            if(pointIFMouseDownFlag){     
+                return
+            }
+            (degIndex<360)? degIndex+=2 : clearDegIndex()
+            pictureEl.style.transform = `rotate(${degIndex}deg)`
+            currentTimeHtml.innerHTML = timeFactory(audioObj.currentTime)
+            setPointPosition ()
+        }, 100);
+    }
+    //音乐资源的重置函数
+    function setCurrentTime (time) {
+        audioObj.currentTime = time
+        currentTimeHtml.innerHTML = timeFactory(audioObj.currentTime)
+    }
+    function setPointPosition () {
+        let processBarWidth = parseInt(window.getComputedStyle(processBarEl).width)
+        let pointLeftPosition = parseInt( (processBarWidth) * (audioObj.currentTime/audioObj.duration) )
+        processCoverEl.style.width =  pointLeftPosition  + 'px'
+        pointEl.style.left = pointLeftPosition - 5 +'px'
+    }
+   //切换歌曲按钮的事件监听
+    nextBtn.addEventListener('click',(e) => {
+        e.stopPropagation()
+        changeSong('next')
+        clearDegIndex()
+    })
+    btnDisplayChange(nextBtn)
+    prevBtn.addEventListener('click',(e) => {
+        e.stopPropagation()
+        changeSong('prev')
+        clearDegIndex()
+    })
+    btnDisplayChange(prevBtn)
+    function btnDisplayChange (DomEl) {
+        let imagePositon = parseInt(window.getComputedStyle(DomEl).backgroundPositionX)
+        DomEl.addEventListener('mouseover',() => {
+            DomEl.style.backgroundPositionX = imagePositon + 122 +'px'
+        })
+        DomEl.addEventListener('mouseleave',() => {
+            DomEl.style.backgroundPositionX = imagePositon +'px'
+        })
+    }
+    //切换歌曲的函数
+    function changeSong (nOrPOrN) {
+        switch (nOrPOrN) {
+            case 'next':
+                (nowPlayMusicIndex >= musicList.length-1)? nowPlayMusicIndex = 0:nowPlayMusicIndex++
+                audioObj.setAttribute('src',musicList[nowPlayMusicIndex].src)
+                flag = true
+                playOrPause(flag)
+                break;
+            case 'prev':
+                (nowPlayMusicIndex <= 0)?nowPlayMusicIndex = musicList.length-1:nowPlayMusicIndex--
+                audioObj.setAttribute('src',musicList[nowPlayMusicIndex].src) 
+                flag = true
+                playOrPause(flag)
+                break;
+            case 'repeat':
+                nowPlayMusicIndex = nowPlayMusicIndex
+                audioObj.setAttribute('src',musicList[nowPlayMusicIndex].src) 
+                flag = true
+                playOrPause(flag)
+                break;
+        }
+    }
+
+    //声音调节的功能实现
+    let linkVolumeObj = document.getElementById('linkVolume')
+    let volumeEl = document.getElementById('volume')
+    let volumeDisplayFlag = false
+    linkVolumeObj.addEventListener('click',(e) => {
+        e.stopPropagation()
+        volumeDisplayFlag = !volumeDisplayFlag
+        if(volumeDisplayFlag){
+            volumeEl.style.display = 'block'
+            setVolume(audioObj.volume) 
+        }else{
+            volumeEl.style.display = 'none'
+        }   
+    })
+    let linkVolumeObjImgPositionX = parseInt(window.getComputedStyle(linkVolumeObj).backgroundPositionX)
+    linkVolumeObj.addEventListener('mouseover',() => {
+        linkVolumeObj.style.backgroundPositionX = linkVolumeObjImgPositionX - 29 +'px'
+    })
+    linkVolumeObj.addEventListener('mouseleave',() => {
+        linkVolumeObj.style.backgroundPositionX = linkVolumeObjImgPositionX + 'px'
+    })
+    document.onclick = (e) => {
+        if(e.target.id=='volume'){
+            return
+        }
+        if(volumeDisplayFlag){
+            volumeDisplayFlag = false
+            volumeEl.style.display = 'none'
+        }
+    }
+    let volumeBarEl = document.getElementById('volumeBar')
+    let volumeCoverEl = volumeBarEl.children[0]
+    let volumePointEl = volumeBarEl.children[1]
+    function setVolume (volume) {
+        if(volume < 0){
+            volume = 0
+        }
+        if(volume > 1){
+            volume = 1
+        }
+        audioObj.volume = volume
+        let volumeBarHeight =  parseInt( window.getComputedStyle(volumeBarEl).height )
+        let volumeDuration = volume * volumeBarHeight
+        volumePointEl.style.bottom = volumeDuration - 5 + 'px'
+        volumeCoverEl.style.height = volumeDuration + 'px'
+    }
+    volumeBarEl.addEventListener('click',(e) => {
+        e.stopPropagation()
+        let volumeBarHeight = parseInt( window.getComputedStyle(volumeBarEl).height )
+        let volumeDuration =  document.documentElement.clientHeight - e.clientY - 67 
+        let volume = (volumeDuration / volumeBarHeight).toFixed(2)
+        setVolume(volume)
+    })
+    
+    volumePointEl.addEventListener('mousedown',(e) => {
+        e.preventDefault()
+        let pointBottomPosition =  parseInt(window.getComputedStyle(volumePointEl).bottom)
+        let volumeBarHeight = parseInt( window.getComputedStyle(volumeBarEl).height )
+        let mouseDownY = document.documentElement.clientHeight - e.clientY - 67
+        let totalMoveDur = 0
+        document.onmousemove = (e) => {
+            let moveDur = document.documentElement.clientHeight - e.clientY - 67 - mouseDownY
+            totalMoveDur = moveDur + pointBottomPosition
+            if(totalMoveDur < -5){
+                totalMoveDur = -5
+            }
+            if(totalMoveDur > (volumeBarHeight - 5)){
+                totalMoveDur = volumeBarHeight - 5
+            }
+            let volume = (( totalMoveDur + 5 )/ volumeBarHeight).toFixed(2)
+            setVolume(volume)
+            document.onmouseup = () => {
+                document.onmousemove = null
+                document.onmouseup = null
+            }
+        }
+    })
+    //播放模式
+    let modeNowFlag = 0
+    let modeChangeBtn = document.getElementById('mode')
+    modeChangeBtn.addEventListener('click',(e) => {
+        e.stopPropagation()
+        modeNowFlag++
+        if(modeNowFlag > 2){
+            modeNowFlag = 0
+        }
+        setMode (modeNowFlag)
+    })
+    let modeChangeBtnImgPositionX = parseInt(window.getComputedStyle(modeChangeBtn).backgroundPositionX)
+    modeChangeBtn.addEventListener('mouseover',() => {
+        if(mode == 'loop'){
+            modeChangeBtn.style.backgroundPositionX = modeChangeBtnImgPositionX - 30 +'px'
+        }else if(mode == 'repeat'){
+            modeChangeBtn.style.backgroundPositionX = modeChangeBtnImgPositionX - 27 +'px'
+        }else if(mode == 'random'){
+            modeChangeBtn.style.backgroundPositionX = modeChangeBtnImgPositionX - 27 +'px'
+        }
+    })
+    modeChangeBtn.addEventListener('mouseleave',() => {
+        modeChangeBtn.style.backgroundPositionX = modeChangeBtnImgPositionX + 'px'
+    })
+    function setMode (modeNowFlag) {
+        switch(modeNowFlag){
+            case 0:
+                mode = 'loop'
+                modeChangeBtn.style.backgroundPositionX = '-1px'
+                modeChangeBtn.style.backgroundPositionY = '-341px'
+                modeChangeBtnImgPositionX = -1
+                break;
+            case 1:
+                mode = 'repeat'
+                modeChangeBtn.style.backgroundPositionX = '-64px'
+                modeChangeBtn.style.backgroundPositionY = '-341px'
+                modeChangeBtnImgPositionX = -64
+                // -91
+                break;
+            case 2:
+                mode = 'random'
+                modeChangeBtn.style.backgroundPositionX = '-64px'
+                modeChangeBtn.style.backgroundPositionY = '-245px'
+                modeChangeBtnImgPositionX = -64
+                // -91
+                break;
+        }
+    }
+    function shuffle(arr) {
+        let len = arr.length;
+        for (let i = 0; i < len - 1; i++) {
+            let index = parseInt(Math.random() * (len - i));
+            let temp = arr[index];
+            arr[index] = arr[len - i - 1];
+            arr[len - i - 1] = temp;
+         }
+        return arr;
+    }
+
+</script>
+</html>
